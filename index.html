@@ -1,83 +1,82 @@
 <html>
-    <head>
-        <title>Witze Generator</title>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="bootstrap.min.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <script src="bootstrap.min.js"></script>
-    </head>
-    <body onload="fetchJoke('zufall')">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="#">Witze Generator mit witzapi.de</a>            
-            </div>
-        </nav>
-        <br>
-        <div class="container">
-            <form>
-                <div class="card">
-                    <div class="card-header">
-                        <label for="select" class="form-label">Wähle eine Kategorie</label>
-                        <select id="select" class="form-select">
-                          <option>zufall</option>
-                          <script>
+<head>
+    <title>Witze Generator</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="bootstrap.min.js"></script>
+</head>
+<body onload="fetchJoke('zufall')">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Witze Generator mit witzapi.de</a>            
+        </div>
+    </nav>
+    <br>
+    <div class="container">
+        <form onsubmit="event.preventDefault();">
+            <div class="card">
+                <div class="card-header">
+                    <label for="select" class="form-label">Wähle eine Kategorie</label>
+                    <select id="select" class="form-select">
+                        <option>zufall</option>
+                        <script>
                             fetch('https://witzapi.de/api/category/?language=de', {
                                 method: 'GET'
                             })
                             .then(response => response.json())
                             .then(data => {
                                 const selectElement = document.getElementById("select");
-    
+
                                 data.forEach(category => {
                                     const optionElement = document.createElement("option");
                                     optionElement.textContent = category.name;
                                     selectElement.appendChild(optionElement);
                                 });
                             });
-                            </script>
-                        </select>
-                    </div>
-                    <div class="card-body">
-                    <button type="submit" onclick="pressedButton()" class="btn btn-primary">Neuer Witz</button>
-                    <br>
-                    <br>
-                    <h1 class="card-text" id = 'joke' style="text-align: center;"></h1>
-                    </div>
+                        </script>
+                    </select>
                 </div>
-            </form>
-        </div>
-    </body>
-</html>
-<script>
-    function pressedButton(){
-        let kat = document.getElementById("select").value;
-
-        fetchJoke(kat);
-    }
-
-    function fetchJoke(kat){
-        if(kat === 'zufall'){
-            console.log("zufall");
-            let url = 'https://witzapi.de/api/joke/?limit=1&language=de';
-
-            fetch(url, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("joke").innerHTML = data[0].text;
-            });
-        }else{
-            console.log(kat);
-            let url = 'https://witzapi.de/api/joke/?limit=1&category=' + kat + '&language=de';
-            
-            fetch(url, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("joke").innerHTML = data[0].text;
-            });
+                <div class="card-body">
+                    <button type="button" onclick="pressedButton()" class="btn btn-primary">Neuer Witz</button>
+                    <br>
+                    <br>
+                    <h1 class="card-text" id='joke' style="text-align: center;"></h1>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        function pressedButton() {
+            let kat = document.getElementById("select").value;
+            fetchJoke(kat);
         }
-    }
-</script>
+
+        function fetchJoke(kat) {
+            if (kat === 'zufall') {
+                console.log("zufall");
+                let url = 'https://witzapi.de/api/joke/?limit=1&language=de';
+
+                fetch(url, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("joke").innerHTML = data[0].text;
+                });
+            } else {
+                console.log(kat);
+                let url = 'https://witzapi.de/api/joke/?limit=1&category=' + kat + '&language=de';
+
+                fetch(url, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("joke").innerHTML = data[0].text;
+                });
+            }
+        }
+    </script>
+</body>
+</html>
